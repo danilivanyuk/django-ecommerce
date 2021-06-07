@@ -116,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-US'
-locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 TIME_ZONE = 'Asia/Almaty'
 
