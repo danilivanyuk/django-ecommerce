@@ -1,4 +1,6 @@
 import django_heroku
+import locale
+locale.setlocale(locale.LC_ALL, "ru_RU.UTF-8")
 """
 Django settings for ecommerce project.
 
@@ -115,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'Asia/Almaty'
 
