@@ -1,0 +1,54 @@
+.checkout {
+  display: flex;
+  justify-content: space-between;
+  color: var(--main-text-color);
+}
+
+.checkout-info {
+  display: flex;
+}
+
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.user-info-inner {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-field {
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid var(--accent_color);
+  padding: 5px;
+  width: 200px;
+}
+
+.shipping-info-inner {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 15px;
+}
+
+.checkout {
+  margin-top: 30px;
+}
+
+
+@media screen and (max-width: 400px) {
+  #paypal-button-container {
+      width: 100%;
+  }
+}
+
+/* Media query for desktop viewport */
+@media screen and (min-width: 400px) {
+  #paypal-button-container {
+      width: 250px;
+  }
+}

@@ -1,0 +1,152 @@
+.manipulate-btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.manipulate-btns a {
+  border-radius: 5px;
+  border: 1px solid var(--accent_color);
+  padding: 25px;
+  margin: 10px;
+}
+
+.current-orders {
+  margin-top: 30px;
+}
+
+.order {
+  margin-top: 20px;
+  box-shadow: 0 10px 15px -5px rgb(0 0 0 / 10%), 0 5px 5px -5px rgb(0 0 0 / 10%),
+    5px 0 10px -5px rgb(0 0 0 / 10%), -5px 0 10px -5px rgb(0 0 0 / 10%);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.customer-info {
+  width: 100%;
+  /* display: flex;
+  justify-content: space-between; */
+  display: grid;
+  grid-template-columns: 1fr 0.7fr 1fr 1fr;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.manage-order {
+  display: flex;
+  align-items: center;
+  margin-right: 50px;
+  justify-content: flex-end;
+}
+.manage-order-btn {
+  background: var(--order_btn_color);
+  display: flex;
+  justify-content: center !important;
+  color: var(--white-color-text) !important;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease-in-out;
+}
+
+#finish-order:hover {
+  background: var(--hover_order_btn);
+}
+
+#delete-order {
+  background: var(--cancel_order_btn);
+}
+
+#delete-order:hover {
+  background: var(--hover_cancel_order_btn);
+}
+
+.order-products {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.admin-subcategory-choose {
+  padding: 3px 1px;
+  border-radius: 5px;
+}
+
+.product-info {
+  margin-right: 10px;
+}
+
+.product-update-delete-btns {
+  margin-top: 10px;
+  display: flex;
+}
+
+.product-update-delete-btns a {
+  padding: 5px;
+  text-align: center;
+  color: var(--white-color-text);
+  border-radius: 5px;
+}
+
+.btn-update-product {
+  background: var(--btn_color);
+  margin-right: 15px;
+}
+
+.btn-update-product:hover {
+  background: var(--hover_btn_color);
+}
+
+.btn-delete-product {
+  color: var(--cancel_order_btn) !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-delete-product:hover {
+  text-decoration: underline;
+}
+
+#create-product {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+#create-product div {
+  display: flex;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#create-product div p {
+  margin-right: 5px;
+}
+
+#create-product #id_size {
+  display: flex;
+  list-style: none;
+}
+
+#create-product #id_size li {
+  margin-right: 5px;
+}
+
+.category_forms {
+  margin-top: 20px;
+}
+
+.subcategory_form {
+  margin-top: 20px;
+}
+
+.category_forms form button {
+  margin-top: 5px;
+}
+
+.category_forms form label {
+  margin-right: 5px;
+}

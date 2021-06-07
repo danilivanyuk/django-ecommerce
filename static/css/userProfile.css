@@ -1,0 +1,33 @@
+.user-profile{
+  display: flex;
+  flex-direction: column;
+}
+
+.orders{
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.3fr 1fr 1fr;
+  grid-gap: 10px;
+  margin: 20px 0;
+}
+
+.order{
+  color: var(--main-text-color);
+}
+
+.cancel-order{
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+  border:none;
+  background: var(--cancel_order_btn);
+  color: var(--white-color-text);
+  padding: 6px;
+  margin-top: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.cancel-order:hover{
+  background: var(--hover_cancel_order_btn);
+
+}

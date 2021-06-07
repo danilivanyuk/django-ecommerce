@@ -1,0 +1,12 @@
+.category {
+  display: flex !important;
+  margin-top: 25px;
+}
+
+.subcategories-menu {
+  max-width: 300px;
+}
+
+.subcategory {
+  margin-bottom: 5px;
+}
