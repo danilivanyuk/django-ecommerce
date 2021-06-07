@@ -259,7 +259,7 @@ def processOrder(request):
     return JsonResponse('Payment Complete', safe=False)
 
 
-locale.setlocale(locale.LC_ALL, "ru_RU")
+locale.setlocale(locale.LC_ALL, "en_US")
 
 
 @admin_only
