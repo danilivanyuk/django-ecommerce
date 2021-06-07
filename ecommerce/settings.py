@@ -1,6 +1,6 @@
 import django_heroku
 import locale
-locale.setlocale(locale.LC_ALL, "ru_RU.UTF-8")
+locale.setlocale(locale.LC_ALL, "en_US.utf8")
 """
 Django settings for ecommerce project.
 
