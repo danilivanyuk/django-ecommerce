@@ -1,0 +1,57 @@
+{% extends 'store/main.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/mobile.css' %}">
+
+{% block content %}
+
+<div class="page-title">
+  <p>{{category}}</p> 
+</div>
+
+<div class="category">
+  <div class="subcategories-menu">
+    {% for subcategory in subcategories %}
+      <div class="subcategory-menu-elem ">
+        <a href="{% url 'subcategory' subcategory.pk %}">{{subcategory.name}}</a>
+      </div>
+    {% endfor %}
+  </div>
+  
+  <div class="subcategory_products">
+
+    {% include 'store/filters.html' %}
+      <div class="products">
+        {% for product in products %}
+        <div class="product">
+            <a href="{% url 'product' product.pk %}">
+              <div class="image-conteiner">
+                <img class="product-image" src="{{ product.imageURL }}" alt="{{product.title}}">
+              </div>
+              <div class="title">
+                {{product.title}}
+              </div>
+              <div class="sizes">
+                {% for i in product.size %}
+                  {{i}}
+                {% endfor %}
+              </div>
+                
+              <div class="price">
+                {{product.price}}₸
+              </div>
+            </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="pages">
+    {% include 'store/paginator.html' %}
+  </div>
+
+</div>
+
+
+
+{% endblock content %}
+

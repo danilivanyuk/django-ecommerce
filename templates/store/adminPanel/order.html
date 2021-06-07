@@ -1,0 +1,105 @@
+{% extends 'store/adminPanel/layout.html' %}
+<!-- {% load static %} -->
+{% load my_tags %}
+{% block content %}
+
+  <!-- {{order}} -->
+
+  <div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Заказ № {{order.transaction_id}}</h1>
+    
+    <div class="card shadow mb-4">
+        
+      <div class="card-body">
+          <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                      <tr>
+                          <th>Имя</th>
+                          <th>Телефон</th>
+                          <th>Дата заказа</th>
+                          <th>Адрес</th>
+                          <th></th>
+                          <th></th>
+                      </tr>
+                  </thead>
+                  
+                  <tbody>
+
+                      <tr>
+                        <td>{{order.customer}}</td>
+                        <td>{{order.customer.phone}}</td>
+                        <td>{{order.ordered_date}}</td>
+                        {% for address in order.get_address %}
+                          <td>{{address}}</td>
+                        {% endfor %}
+                        
+                        {% if order.finished %}
+                          <td><a class="manage-order-btn" id="finish-order" href="{% url 'unfinish_order' order %}">Отметить как незавершенный</a></td>
+                        {% else %}
+                          <td><a class="manage-order-btn" id="finish-order" href="{% url 'finish_order' order %}">Отметить как завершенный</a></td>
+                        {% endif %}
+                        <td><a class="manage-order-btn" id="delete-order" style="margin-left: 10px; " href="{% url 'delete_order' order %}">Удалить заказ</a></td>
+                        
+                      </tr>
+                      
+                  </tbody>
+              </table>
+          </div>
+          <div class="pages">
+            {% include 'store/paginator.html' %}
+          </div>
+      </div>
+      
+  </div>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                          <th></th>
+                          <th>Title</th>
+                          <th>Sizes</th>
+                          <th>Price</th>
+                          <th>Gender</th>
+                          <th>Color</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                          <th></th>
+                          <th>Title</th>
+                          <th>Sizes</th>
+                          <th>Price</th>
+                          <th>Gender</th>
+                          <th>Color</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                      {% for item in orderproducts %}
+                        <tr>
+                          <td><img class="product-image" style="width: 100px; height: 150px;" src="{{ item.product.imageURL }}" alt=""></td>
+                          <td>{{item.product}}</td>
+                          <td>{{item.size}}</td>
+                          <td>{{item.product.price}}, {{item.quantity}} шт</td>
+                          <td>{{item.product.gender}}</td>
+                          <td>{{item.product.color}}</td>
+                          
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+        
+    </div>
+  
+  </div>
+
+{% endblock %}

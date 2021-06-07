@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+{% load static %}
+<!-- {% load my_tags %} -->
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Магазин</title>
+  
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  
+  <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+  <link rel="stylesheet" href="{% static 'css/product.css' %}">
+  <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+  <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+
+  <link rel="stylesheet" href="{% static 'css/category.css' %}">
+  <link rel="stylesheet" href="{% static 'css/userProfile.css' %}">
+  <link rel="stylesheet" href="{% static 'css/adminPanel.css' %}">
+  <link rel="stylesheet" href="{% static 'css/mobile.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" referrerpolicy="no-referrer" />
+  <script type="text/javascript">
+    let user = '{{request.user}}'
+
+    function getToken(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === name + "=") {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    let csrftoken = getToken("csrftoken");
+
+    function getCookie(name) {
+		    // Split cookie string and get all individual name=value pairs in an array
+		    let cookieArr = document.cookie.split(";");
+
+		    // Loop through the array elements
+		    for(let i = 0; i < cookieArr.length; i++) {
+		        let cookiePair = cookieArr[i].split("=");
+
+		        /* Removing whitespace at the beginning of the cookie name
+		        and compare it with the given string */
+		        if(name == cookiePair[0].trim()) {
+		            // Decode the cookie value and return
+		            return decodeURIComponent(cookiePair[1]);
+		        }
+		    }
+
+		    // Return null if not found
+		    return null;
+		}
+    let cart = JSON.parse(getCookie('cart'))
+    if(cart == undefined){
+      cart = {}
+      document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+    }
+
+  </script>
+</head>
+<body>
+  <div class="main">
+    <div class="container">
+    <header>
+  
+      <nav id="nav">
+        <div class="logo">
+          <a href="{% url 'homepage' %}">City Center</a>
+        </div>
+        <div class="header-search">
+          <form action={% url 'search_result' %} method="GET">
+            <input name="global-search" id="global-search" type="text">
+            <button type="submit">
+              <svg width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11.3281 19.5312C15.8586 19.5312 19.5312 15.8586 19.5312 11.3281C19.5312 6.79766 15.8586 3.125 11.3281 3.125C6.79766 3.125 3.125 6.79766 3.125 11.3281C3.125 15.8586 6.79766 19.5312 11.3281 19.5312Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.1284 17.129L21.8746 21.8751" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </form>
+          
+          
+        </div>
+        <div class="user-nav">
+          {% if request.user.is_superuser  %}
+          <div class="admin-link">
+            <a href="{% url 'admin_panel' %}">Панель Админа</a>
+          </div>
+          {% endif %}
+          <div class="cart">
+            <a href="{% url 'cart' %}">
+              <svg width="48" height="40" viewBox="0 0 48 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M45.0833 1H2.91667C1.85812 1 1 1.89543 1 3V39C1 40.1046 1.85812 41 2.91667 41H45.0833C46.1419 41 47 40.1046 47 39V3C47 1.89543 46.1419 1 45.0833 1Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M1 9H47" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M33.5837 17C33.5837 19.6522 32.574 22.1957 30.7768 24.0711C28.9795 25.9464 26.542 27 24.0003 27C21.4587 27 19.0211 25.9464 17.2239 24.0711C15.4267 22.1957 14.417 19.6522 14.417 17" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+          <div class="lk">
+            <a href="{% url 'userProfile' %}">
+              <svg width="38" height="40" viewBox="0 0 38 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M36.5556 41V36.5556C36.5556 34.1981 35.6191 31.9372 33.9521 30.2702C32.2851 28.6032 30.0241 27.6667 27.6667 27.6667H9.88889C7.53141 27.6667 5.27049 28.6032 3.60349 30.2702C1.9365 31.9372 1 34.1981 1 36.5556V41M27.6667 9.88889C27.6667 14.7981 23.687 18.7778 18.7778 18.7778C13.8686 18.7778 9.88889 14.7981 9.88889 9.88889C9.88889 4.97969 13.8686 1 18.7778 1C23.687 1 27.6667 4.97969 27.6667 9.88889Z" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+          </div>
+        </div>
+      </nav>
+    
+    </header>
+    <div class="links-wrapper">
+      <ul id="links">
+        {% for category in categories_for_links %}
+        <li class="category-link"> <a href="{% url 'category' category.pk %}">{{category}}</a>
+          <ul class="submenu">
+            {% for subcategory in subcategories_for_links %}
+              {% if subcategory.category == category %}
+                <li class="subcategory-link">
+                  <a href="{% url 'subcategory' subcategory.pk %}">{{subcategory}}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <nav role="navigation">
+      <div id="menuToggle">
+        <!--
+        A fake / hidden checkbox is used as click reciever,
+        so you can use the :checked selector on it.
+        -->
+        <input type="checkbox" />
+        
+        <!--
+        Some spans to act as a hamburger.
+        
+        They are acting like a real hamburger,
+        not that McDonalds stuff.
+        -->
+        <div class="hamburger"><div></div></div>
+        
+        <!--
+        Too bad the menu has to be inside of the button
+        but hey, it's pure CSS magic.
+        -->
+        <ul id="menu">
+          {% for category in categories_for_links %}
+          <li class="category-link mobile-category-link" onclick="handleDropdown(this)">{{category}} <i class="fas fa-caret-down"></i></a>
+            <ul class="dropdown-menu">
+              <li class="subcategory-link">
+                <a href="{% url 'category' category.id %}">Посмотреть все</a>
+              </li>
+              {% for subcategory in subcategories_for_links %}
+                {% if subcategory.category == category %}
+                  <li class="subcategory-link">
+                    <a href="{% url 'subcategory' subcategory.pk %}">{{subcategory}}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </nav>
+
+
+    
+      {% block content %}
+    
+      {% endblock content %}
+  </div>
+
+
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+  
+  <script src="{% static 'js/cart.js' %}"></script>
+  <script>
+    categories_links = document.querySelectorAll(".mobile-category-link");
+    categories_links.forEach(element => {
+      
+    });
+    function handleDropdown(elem){
+      let dropdownElems = elem.querySelector(".dropdown-menu")
+      arrow = elem.querySelector('.fa-caret-down')
+      
+      elem.addEventListener('click', changeStyleDropDown(dropdownElems, arrow))
+    }
+
+    function changeStyleDropDown(dropdownElems, arrow){
+      
+      if(dropdownElems.style.display == 'block'){
+        arrow.classList.remove('open')
+        arrow.classList.add('close')
+        dropdownElems.style.display = 'none'
+        
+      } else{
+        let allDropDown = document.querySelectorAll('.dropdown-menu');
+        let allArrowIcons = document.querySelectorAll('.fa-caret-down')
+        allDropDown.forEach(elem =>{
+          elem.style.display = 'none'
+          
+        })
+        allArrowIcons.forEach(elem =>{
+          elem.classList.remove('open')
+          elem.classList.add('close')
+        })
+        arrow.classList.remove('close')
+        arrow.classList.add('open')
+        dropdownElems.style.display = 'block'
+      }
+      
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+
+<form action="" method="GET" class="filter-form">
+  <div class="filters">
+
+  
+    <div class="sizes button-drop-down">
+      
+        {% if sizes %}
+        <span class="multifilter-title filtered">
+          Размеры:
+          {% for size in sizes %}
+            {{size}}
+          {% endfor %}
+        </span>
+        {% else %}
+          <span class="multifilter-title">
+            Размеры
+          </span>
+        {% endif %}
+      <div class="multifilter-list">
+      {% for value, text in form.size.field.choices %}
+        <div class="multifilter-list-item">
+          <input id="id_size_{{ forloop.counter0 }}" name="size" type="checkbox" value="{{ value }}"
+          {% if value in sizes %} 
+            checked="checked"
+          {% endif %}>
+          <label>{{ text }}</label>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+
+      
+    <div class="gender-filter button-drop-down">
+      {% if gender %}
+        <span class="multifilter-title filtered">
+          Пол:
+          {% for item in gender %}
+              {% if item == 'man' %}
+                Мужской
+              {% elif item == 'women' %}
+                Женский
+              {% elif item == 'kid' %}
+                Детский
+              {% endif %}
+          {% endfor %}
+        </span>
+        {% else %}
+          <span class="multifilter-title">
+            Пол
+          </span>
+        {% endif %}
+      <div class="multifilter-list">
+        <div class="multifilter-list-item">
+          <input  name="gender_select" type="checkbox" value="man"
+          {% if 'man' in gender %} 
+          checked="checked"
+          {% endif %}
+          >
+          <label for="">Мужской</label>
+        </div>
+
+        <div class="multifilter-list-item">
+          <input  name="gender_select" type="checkbox" value="women"
+          {% if 'women' in gender %} 
+          checked="checked"
+          {% endif %}>
+          <label for="">Женский</label>
+        </div>
+        <div class="multifilter-list-item">
+          <input  name="gender_select" type="checkbox" value="kid"
+          {% if 'kid' in gender %} 
+          checked="checked"
+          {% endif %}>
+          <label for="">Детский</label>
+        </div>
+          
+      </div>
+      
+    </div>
+        
+
+    <div class="price_filter button-drop-down">
+      {% if price_min or price_max %}
+        <span class="multifilter-title filtered">
+          {% if price_min %}
+            {{price_min}}₸-
+          {% else %}
+            0₸ -
+          {% endif %}
+          {% if price_max %}
+            {{price_max}}₸
+          {% else %}
+            ∞
+          {% endif %}
+        </span>
+        {% else %}
+          <span class="multifilter-title">
+            Цена
+          </span>
+        {% endif %}
+      <div class="multifilter-list">
+        <div class="multifilter-list-item">
+          <label for="">Цена от:</label>
+          <input type="number" name="price-from-filter" placeholder="">
+        </div>
+        <div class="multifilter-list-item">
+          <label for="">Цена до:</label>
+          <input type="number" name="price-to-filter" placeholder="">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sorting-filter button-drop-down">
+      {% if sort_value %}
+        <span class="multifilter-title filtered">
+          {% if sort_value == 'order_by_min_price' %}
+            Сначала дешевле
+          {% elif sort_value == 'order_by_max_price' %}
+            Сначала дороже
+          {% elif sort_value == 'new_arr' %}
+            По новинкам
+          {% endif %}
+        </span>
+        {% else %}
+          <span class="multifilter-title">
+            Сортировать по
+          </span>
+        {% endif %}
+      <div class="multifilter-list">
+        <div class="multifilter-list-item">
+          <input type="checkbox" name="sort"  value="order_by_min_price" 
+          {% if sort_value == 'order_by_min_price' %} 
+          checked="checked"
+          {% endif %} onclick="onlyOne(this)">
+          <label for="">Сначала дешевле</label>
+        </div>
+        <div class="multifilter-list-item">
+          <input type="checkbox" name="sort"  value="order_by_max_price"
+          {% if sort_value == 'order_by_max_price' %} 
+          checked="checked"
+          {% endif %} onclick="onlyOne(this)">
+          <label for="">Сначала дороже</label>
+        </div>
+        <div class="multifilter-list-item">
+          <input type="checkbox" name="sort"  value="new_arr"
+          {% if sort_value == 'new_arr' %} 
+          checked="checked"
+          {% endif %} onclick="onlyOne(this)">
+          <label for="">По новинкам</label>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+    
+    <input class="submit-filter" type="submit" value="Применить фильтры">
+  
+  
+
+</form>
+
+
+<script>
+  
+  let btn_arr = document.querySelectorAll('.multifilter-title')
+  btn_arr.forEach(btn  => {
+    btn.addEventListener('click', show_dropdown)
+  });
+
+  function show_dropdown(e){
+    
+    let multifilter_list = e.target.nextSibling.nextSibling;
+    if(multifilter_list.classList.contains('show')){
+      multifilter_list.classList.remove('show')
+    } else{
+      removeClassfromMultifilter()
+      multifilter_list.classList.add('show')
+    }
+
+  }
+
+  function removeClassfromMultifilter(){
+    let filter_arr = document.querySelectorAll('.multifilter-list')
+    filter_arr.forEach(el =>{
+      el.classList.remove('show')
+    })
+  }
+
+  function onlyOne(checkbox) {
+    let checkboxes = document.getElementsByName('sort')
+    checkboxes.forEach((item) => {
+        if (item !== checkbox) item.checked = false
+    })
+}
+</script>

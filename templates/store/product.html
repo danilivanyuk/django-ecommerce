@@ -1,0 +1,43 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+
+{% block content %}
+
+
+
+<div class="product-holder">
+  <div class="product-gallery">
+    <img class="thumbnail" src="{{ product.imageURL }}" alt="">
+  </div>
+  <div class="product-side">
+    <div class="product-title">
+      <p>{{ product.title }}</p>
+      <p class="product-subcategory">{{ product.subcategory }}</p>
+    </div>
+    <div class="product-price">
+      <p>{{ product.price }} ₸</p>
+    </div>
+    <div class="">
+      <select name="size-select" class="product-sizes-pick sizes">
+        <option value="" disabled selected style="display: none;">Choose size</option> 
+        {% for i in product.size %}
+          <option value="{{i}}">{{i}}</option> 
+        {% endfor %}
+      </select>
+    </div>
+    <button data-product="{{product.id}}" data-size="{{product.size}}" data-action="add" class=" update-cart product-add-to-cart" >Add to cart</button>
+    <div class="product-description">
+      <p>Состав: Хлопок - 100%</p>
+      <p>Длина: 75 см</p>
+      <p>Длина рукава: 74 см</p>
+      <p>Сезон: мульти</p>
+      <p>Цвет: хаки</p>
+      <p>Узор: однотонный</p>
+      <p>Страна производства: Тунис</p>
+      <p>Артикул UN012EMJZJB3</p>
+      
+    </div>
+  </div>
+</div>
+{% endblock %}

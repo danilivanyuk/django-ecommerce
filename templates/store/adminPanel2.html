@@ -1,0 +1,102 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="manipulate-btns">
+  <a href="{% url 'create_product' %}"> Add product</a>
+  <a href="{% url 'create_category_subcategory' %}"> Add category</a>
+  <a href="{% url 'products_list' %}">All products</a>
+  <a href="{% url 'finished_orders' %}">Finished orders</a>
+</div>
+
+<div class="page-title">
+  <p>Current orders</p>
+</div>
+
+<div class="current-orders">
+  {% for order in orders %}
+  {% if order.complete %}
+  
+
+  <div class="order">
+    <div class="customer-info">
+      <p>{{order.customer}}, {{order.customer.phone}}</p>
+      <p>{{order.ordered_date}}</p>
+      {% for address in order.get_address %}
+        <p>{{address}}</p>
+      {% endfor %}
+      <p>{{order.transaction_id}}</p>
+    </div>
+    <div class="manage-order">
+      <a class="manage-order-btn" id="finish-order" href="{% url 'finish_order' order %}">Mark as complete</a>
+      <a class="manage-order-btn" id="delete-order" style="margin-left: 10px; " href="{% url 'delete_order' order %}">Delete order</a>
+    </div>
+    
+    <div class="order-products">
+      {% for order_product in order_products %}
+        {% if order_product.order == order%}
+          <div class="product-info">
+            <img class="product-image" src="{{ order_product.product.imageURL }}" alt="">
+            <p>{{order_product.product}}</p>
+            <p>Размер: {{order_product.size}}</p>
+            <p>{{order_product.product.price}} $, Qty: {{order_product.quantity}}</p>
+          </div>          
+        {% endif %}
+      {% endfor %}
+    </div>
+    
+
+  </div>
+    
+
+  {% endif %}
+{% endfor %}
+</div>
+
+
+
+{% endblock %}
+
+
+<!-- Pie Chart -->
+<div class="col-xl-4 col-lg-5">
+  <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+      <div
+          class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+          <div class="dropdown no-arrow">
+              <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                  aria-labelledby="dropdownMenuLink">
+                  <div class="dropdown-header">Dropdown Header:</div>
+                  <a class="dropdown-item" href="#">Action</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+          </div>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+          <div class="chart-pie pt-4 pb-2">
+              <canvas id="myPieChart"></canvas>
+          </div>
+          <div class="mt-4 text-center small">
+              <span class="mr-2">
+                  <i class="fas fa-circle text-primary"></i> Direct
+              </span>
+              <span class="mr-2">
+                  <i class="fas fa-circle text-success"></i> Social
+              </span>
+              <span class="mr-2">
+                  <i class="fas fa-circle text-info"></i> Referral
+              </span>
+          </div>
+      </div>
+  </div>
+</div>
