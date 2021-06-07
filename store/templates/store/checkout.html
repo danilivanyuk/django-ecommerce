@@ -1,0 +1,177 @@
+{% extends 'store/main.html' %}
+{% load static %}
+<style>
+  .hidden{
+    display: none;
+  }
+</style>
+{% block content %}
+
+  <p class="page-title">
+    Checkout
+  </p>
+  
+
+  <div class="checkout">
+    {% if order.get_cart_total > 0 %}
+
+    <div class="checkout-info">
+      <form action="" id="form">
+        {% csrf_token %}
+        
+        <div class="user-info">
+          <p style="margin-bottom: 10px;">Personal info</p>
+            <div class="user-info-inner">
+              <input type="text" required class="input-field" name="name" placeholder="Имя Фамилия" >
+
+              <input type="tel" required class="input-field" name="telephone" placeholder="Телефон">
+            </div>
+              
+        </div>
+        <div class="shipping-info">
+          <p>Shipping address</p>
+            <div class="shipping-info-inner">
+              <input type="text" required class="input-field" name="city" placeholder="Населенный пункт" >
+          
+              <input type="text" required class="input-field" name="street" placeholder="Улица" >
+            
+              <input cla type="text" required class="input-field" name="house" placeholder="Дом" >
+            
+              <input type="text" required class="input-field" name="appartament" placeholder="Квартира" >
+            </div>    
+        </div>
+        <!-- <input type="submit" class="checkout cart-checkout-btn" value="Отправить заказ" id="order-products"/> -->
+        <div id="paypal-button-container" style="margin-top: 20px;"></div>
+      </form>
+      
+    </div>
+    <div class="cart-checkout">
+      <div class="cart-checkout-inner">
+        <div class="total">
+          <p>Total</p>
+          <p>{{order.get_cart_total}} ₸</p>
+        </div>
+        <div class="cart-checkout-info">
+          {% for item in items %} 
+          <div class="cart-checkout-products-amount">
+            <p class="title-quantity">{{item.product.title}}, {{item.quantity}} шт</p>
+            <p>{{item.product.price}} ₸</p>
+          </div>
+          {% endfor %}
+          
+          <div class="cart-checkout-delivery" style="margin-bottom: 0;">
+            <p>Delivery</p>
+            <p>Free</p>
+          </div>
+        </div>
+        
+      </div>
+      
+    </div>
+    {% endif %}
+
+    
+  </div>
+  <script src="https://www.paypal.com/sdk/js?client-id=AQ31MrnEzk9aOUoBtji0vQ-ok0Xy18EAUJZeTl0M5MiqS_DXPKeLEjC5UsJXBrGdB5R7xCZ01w3xDn4l&currency=RUB"></script>
+  <script>
+    let total = '{{order.get_cart_total}}'
+
+    // Render the PayPal button into #paypal-button-container
+    paypal.Buttons({
+
+        // Set up the transaction
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: parseFloat(total).toFixed(2)
+                    }
+                }]
+            });
+        },
+
+        // Finalize the transaction
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                // Show a success message to the buyer
+                alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                submitFormData()
+            });
+        }
+
+
+    }).render('#paypal-button-container');
+</script>
+  <script type="text/javascript">
+    let form = document.querySelector('#form')
+    csrftoken = form.getElementsByTagName("input")[0].value
+
+    // let total = '{{order.get_cart_total}}'
+
+    if (user != 'AnonymousUser'){
+      document.querySelector('.user-info').innerHTML = ''
+    }
+    let user_info = document.querySelector('.user-info')
+      if (user != 'AnonymousUser'){
+        user_info.style.display = 'none'
+      }
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault()
+      console.log('Form Submited');
+    })
+
+    // document.getElementById('order-products').addEventListener('click', function(e){
+    //   submitFormData()
+    // })
+    
+
+    function submitFormData(){
+      let userFormData = {
+        'name': null,
+        'telephone': null,
+        'total': total
+      }
+
+      let shippingInfo = {
+        'city': form.city.value,
+        'street': form.street.value,
+        'house': form.house.value,
+        'appartament':form.appartament.value
+      }
+
+      // shippingInfo.city = form.city.value
+      // shippingInfo.street = form.street.value
+      // shippingInfo.home = form.home.value
+      // shippingInfo.appartament = form.appartament.value
+
+      if (user == 'AnonymousUser'){
+        userFormData.name = form.name.value
+        userFormData.telephone = form.telephone.value
+        console.log(userFormData);
+      }
+      console.log(userFormData);
+      let url = '/process_order/'
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-ype':'application/json',
+          'X-CSRFToken':csrftoken,
+        },
+        body: JSON.stringify({'form':userFormData, 'shipping':shippingInfo}),
+      })
+      .then((response)=>{
+        console.log(response);
+        return response.json()
+      })
+      .then((data)=>{
+        console.log(data);
+        cart = {}
+        document.cookie = 'cart=' + JSON.stringify(cart) + ';domain=;path=/'
+        window.location.href = "{% url 'homepage' %}"
+      })
+    }
+    
+  </script>
+
+{% endblock content %}

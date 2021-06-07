@@ -1,0 +1,77 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+<p class="page-title">
+  Cart
+</p>
+
+<div class="cart">
+  <div class="cart-products">
+    {% for item in items %} 
+    <div class="cart-product">
+      <div class="cart-product-image">
+        <img src="{{ item.product.imageURL }}" alt="">
+      </div>
+      <div class="cart-product-title">
+        {{item.product.title}}
+      </div>
+      <div class="choosen-size sizes">
+          {{item.size}}
+      </div>
+        <div class="quantity-change">
+          <button data-product={{item.product.id}} data-size={{item.size}} data-action="remove" class="decrease-quantity update-cart">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+            </svg>
+          </button>
+          <p>{{item.quantity}}</p>
+          <button data-product={{item.product.id}} data-size={{item.size}} data-action="add" class="increase-quantity update-cart" >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+    
+          </button> 
+        </div>
+        <div class="cart-product-price">
+          <p>{{item.product.price}} ₸</p>
+        </div>
+    </div>
+    {% endfor %}
+  
+  </div>
+  {% if order.get_cart_total > 0 %}
+  <div class="cart-checkout">
+    <div class="cart-checkout-inner">
+      <div class="total">
+        <p>Total</p>
+        <p>{{order.get_cart_total}} ₸</p>
+      </div>
+      <div class="cart-checkout-info">
+        {% for item in items %} 
+        <div class="cart-checkout-products-amount">
+          <p class="title-quantity">{{item.product.title}}, {{item.quantity}} шт</p>
+          <p>{{ item.get_total}} ₸</p>
+        </div>
+        {% endfor %}
+        
+        <div class="cart-checkout-delivery">
+          <p>Delivery</p>
+          <p>Free</p>
+        </div>
+      </div>
+      
+      <a class="cart-checkout-btn" href="{% url 'checkout' %}">Continue</a>
+        
+    </div>
+    
+  </div>
+  {% endif %}
+  
+</div>
+
+
+
+{% endblock content %}

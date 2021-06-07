@@ -1,0 +1,68 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% load my_tags %}
+{% block content %}
+<!-- <link rel="stylesheet" href="{% static 'css/main.css' %}"> -->
+<div class="page-title">
+  <p>{{current_subcategory}}</p>
+</div>
+
+  <div class="category">
+
+    <div class="subcategories-menu">
+    {% for subcategory in all_subcategory_products %}
+      
+        
+        {% if subcategory == current_subcategory %}
+        
+        <div class="subcategory-menu-elem current-subcategory">
+          <a href="{% url 'subcategory' subcategory.pk %}">{{subcategory.name}}</a>
+        </div>
+        {% else %}
+        <div class="subcategory-menu-elem">
+          <a href="{% url 'subcategory' subcategory.pk %}">{{subcategory.name}}</a>
+        </div>
+        {% endif %}
+      
+    {% endfor %}
+    </div>
+  
+
+  
+    
+  
+    <div class="subcategory_products">
+
+      {% include 'store/filters.html' %}
+        <div class="products">
+          {% for product in products %}
+          <div class="product">
+              <a href="{% url 'product' product.pk %}">
+                <div class="image-conteiner">
+                  <img class="product-image" src="{{ product.imageURL }}" alt="{{product.title}}">
+                </div>
+                <div class="title">
+                  {{product.title}}
+                </div>
+                <div class="sizes">
+                  {% for i in product.size %}
+                    {{i}}
+                  {% endfor %}
+                </div>
+                  
+                <div class="price">
+                  {{product.price}}₸
+                </div>
+              </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pages">
+    {% include 'store/paginator.html' %}
+  </div>
+
+{% endblock content %}

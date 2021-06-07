@@ -1,0 +1,94 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<a style="font-size: 1.2rem; margin-bottom: 100px;" href="{% url 'logout' %}">Выйти с аккаунта</a>
+<p class="page-title">Заказы</p>
+
+
+<div class="user-profile">
+  <div class="order-products">
+    <h3>Current orders:</h3>
+    <div class="products">
+      {% for order_product in order_products %}
+      {% if order_product.order.complete and order_product.order.finished == false %}
+        {{order_product.order.product}}
+      
+            <div class="product">
+              <img class="product-image" src="{{order_product.product.imageURL}}" alt=""> 
+              <p>{{order_product.product}}</p>
+              <p>Size: {{order_product.size}}</p>
+              <p>Qty: {{order_product.quantity}}</p>
+              <p>{{order_product.get_total}} $</p>
+            
+              {% if order_product.order.if_less_then_24 %}
+              <button class="cancel-order"  data-product="{{order_product.product.id}}" data-order="{{order_product.order}}">Cancel</button>
+              {% endif %}
+            </div>
+      {% endif %}
+    
+      {% endfor %}
+    </div>
+    
+    
+  </div>
+  
+  <div class="finished-orders">
+    <h3>Completed orders:</h3>
+    <div class="products">
+    
+    {% for order_product in order_products %}
+      {% if order_product.order.finished %}
+        {{order_product.order.product}}
+          
+            <div class="product">
+              <div class="image-conteiner">
+                <img class="product-image" src="{{order_product.product.imageURL}}" alt="">
+              </div>
+              <p>{{order_product.product}}</p>
+              <p>Size: {{order_product.size}}</p>
+              <p>Qty: {{order_product.quantity}}</p>
+              <p>{{order_product.get_total}} ₸</p>
+            
+              {% if order_product.order.if_less_then_24 %}
+              <!-- <button class="cancel-order"  data-product="{{order_product.product.id}}" data-order="{{order_product.order}}">Отменить</button> -->
+              {% endif %}
+            </div>
+      {% endif %}
+    
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+<script>
+  let cancel_order_btns = document.querySelectorAll('.cancel-order')
+  cancel_order_btns.forEach((btn) =>{
+    btn.addEventListener('click', cancel_order)
+  })
+
+  function cancel_order(){
+    let productId = this.dataset.product
+    let order = this.dataset.order
+    console.log(order,productId);
+    let url = '/cancel_order/';
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        'X-CSRFToken': csrftoken
+      },
+      body:JSON.stringify({
+        productId:productId,
+        order:order
+      }),
+    })
+    .then((response) =>{
+      return response.json();
+    })
+    .then((data)=>{
+      location.reload();
+    })
+  }
+</script>
+{% endblock content %}
