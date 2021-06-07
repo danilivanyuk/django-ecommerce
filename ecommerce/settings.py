@@ -1,6 +1,4 @@
-import django_heroku
-import locale
-locale.setlocale(locale.LC_ALL, "en_US.utf8")
+
 """
 Django settings for ecommerce project.
 
@@ -145,4 +143,3 @@ MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 
-django_heroku.settings(locals())
